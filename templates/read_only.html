@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read-Only Employee List</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table thead {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        table th, table td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #e9ecef;
+            transition: all 0.2s ease-in-out;
+        }
+
+        th {
+            text-transform: uppercase;
+        }
+
+        td {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .buttons a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            margin: 0 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .buttons a:hover {
+            background-color: #218838;
+        }
+
+        .login-btn {
+            background-color: #007bff;
+        }
+
+        .login-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            .buttons a {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Employee Rewards</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.points }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="buttons">
+            <!-- Link to the Dashboard or Admin Panel -->
+            <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+            
+            <!-- Login Button -->
+            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+        </div>
+    </div>
+
+    <!-- Include canvas-confetti library from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Confetti logic -->
+    <script>
+        window.addEventListener('load', function() {
+            // Trigger confetti when the page is loaded
+            confetti({
+                particleCount: 1000,
+                spread: 90,
+                origin: { y: 0.6 }
+            });
+        });
+    </script>
+
+</body>
+</html>

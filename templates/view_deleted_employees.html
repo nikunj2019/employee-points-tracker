@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deleted Employees</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* Basic modern styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .restore-button {
+            background-color: #007bff;
+        }
+        .restore-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Deleted Employees</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Points</th>
+                <th>Restore Employee</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in deleted_employees %}
+            <tr>
+                <!-- Hyperlink Employee's Name to View Points History -->
+                <td>
+                    <a href="{{ url_for('view_points_history', id=employee.id) }}">{{ employee.name }}</a>
+                </td>
+                <td>{{ employee.points }}</td>
+
+                <!-- Restore Employee Button -->
+                <td>
+                    <form action="{{ url_for('restore_employee', id=employee.id) }}" method="POST">
+                        <button type="submit" class="restore-button" onclick="return confirm('Are you sure you want to restore this employee?');">Restore</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('index') }}">Back to Dashboard</a>
+</div>
+
+<script src="/static/scripts.js"></script>
+</body>
+</html>

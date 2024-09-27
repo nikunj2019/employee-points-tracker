@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* Basic modern styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        nav a {
+            margin: 0 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        input[type="number"], input[type="text"], select {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .delete-button {
+            background-color: #dc3545;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+        form {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Employee Dashboard</h1>
+
+    <nav>
+        <a href="{{ url_for('view_deleted_employees') }}">View Deleted Employees</a>
+        <a href="{{ url_for('read_only_page') }}">Read-Only Page</a>
+        {% if current_user.role == 'admin' %}
+            <a href="{{ url_for('create_user') }}">Create New User</a>
+            <a href="{{ url_for('change_password') }}">Change User Password</a>
+        {% endif %}
+	<a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </nav>
+
+    <!-- Add Employee Form -->
+    <form action="{{ url_for('add_employee') }}" method="POST" style="margin-bottom: 20px;">
+        <input type="text" name="name" placeholder="Enter Employee Name" required>
+        <button type="submit">Add Employee</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Points</th>
+                <th>Add Points (Positive Actions)</th>
+                <th>Deduct Points (Negative Actions)</th>
+                <th>Redeem Points</th>
+                {% if current_user.role != 'manage' %}
+                    <th>Delete Employee</th> <!-- Hide this column if the user is a 'Manage' role -->
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <!-- Hyperlink the Employee's Name to View Points History -->
+                <td>
+                    <a href="{{ url_for('view_points_history', id=employee.id) }}">{{ employee.name }}</a>
+                </td>
+                <td>{{ employee.points }}</td>
+
+                <!-- Add Points for Positive Actions -->
+                <td>
+                    <form action="{{ url_for('add_points', id=employee.id) }}" method="POST">
+                        <select name="points" required>
+                            <option value="10">Perfect attendance in a week (+10)</option>
+                            <option value="20">No call-offs in a month (+20)</option>
+                            <option value="5">Arriving on time every day in a week (+5)</option>
+                            <option value="10">Submitting lesson plans on time (+10)</option>
+                            <option value="15">Volunteering to cover a shift (+15)</option>
+                        </select>
+                        <input type="text" name="comment" placeholder="Comment" required>
+                        <button type="submit">Add</button>
+                    </form>
+                </td>
+
+                <!-- Deduct Points for Negative Actions -->
+                <td>
+                    <form action="{{ url_for('remove_points', id=employee.id) }}" method="POST">
+                        <select name="points" required>
+                            <option value="20">Unexcused absence (-20)</option>
+                            <option value="5">Tardiness (per instance) (-5)</option>
+                            <option value="10">Failure to notify absence properly (-10)</option>
+                            <option value="10">Late submission of lesson plans (-10)</option>
+                        </select>
+                        <input type="text" name="comment" placeholder="Comment" required>
+                        <button type="submit">Deduct</button>
+                    </form>
+                </td>
+
+                <!-- Redeem Points Form -->
+                <td>
+                    <form action="{{ url_for('redeem_points', id=employee.id) }}" method="POST">
+                        <select name="reward" required>
+                            <option value="100">100 Points - $20 Gift Card</option>
+                            <option value="200">200 Points - 4 Hours Off</option>
+                            <option value="300">300 Points - 8 Hours Off (Full Day)</option>
+                            <option value="500">500 Points - $500 Bonus</option>
+                        </select>
+                        <input type="text" name="comment" placeholder="Comment (Optional)">
+                        <button type="submit">Redeem</button>
+                    </form>
+                </td>
+
+                <!-- Soft Delete Employee -->
+                
+		{% if current_user.role != 'manage' %}
+		<td>
+                    <form action="{{ url_for('soft_delete_employee', id=employee.id) }}" method="POST">
+                        <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this employee?');">Delete</button>
+                    </form>
+                </td>
+		{% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="/static/scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Points History</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+
+        .table th, .table td {
+            text-align: center;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Points History for {{ employee.name }}</h1>
+
+        <table class="table table-bordered mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Date</th>
+                    <th>Points</th>
+                    <th>Added/Removed By</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for history in points_history %}
+                    <tr>
+                        <td>{{ history.date }}</td>
+                        <td>{{ history.points }}</td>
+                        <td>{{ history.user.username }}</td>
+                        <td>{{ history.comment }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-info">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
