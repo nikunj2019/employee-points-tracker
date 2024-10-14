@@ -184,7 +184,7 @@ def add_employee():
     new_employee = Employee(name=name)
     db.session.add(new_employee)
     db.session.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('dashboard'))
 
 @app.route('/redeem_points/<int:id>', methods=['POST'])
 @login_required

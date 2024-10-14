@@ -3,8 +3,8 @@ from models import User
 from werkzeug.security import generate_password_hash
 
 # Define admin details
-admin_username = 'admin'
-admin_password = 'adminpassword'
+admin_username = 'njadawala'
+admin_password = 'Ilovegolu@2023'
 admin_role = 'admin'
 
 # Create an admin user
