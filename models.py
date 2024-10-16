@@ -11,6 +11,9 @@ class Employee(db.Model):
     is_deleted = db.Column(db.Boolean, default=False)  # Soft delete flag
     points_history = db.relationship('PointsHistory', backref='employee', lazy=True, cascade="all, delete-orphan")
 
+    # Single relationship to User (avoid multiple backrefs)
+    user = db.relationship('User', back_populates='employee', uselist=False)
+
 class PointsHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     points = db.Column(db.Integer, nullable=False)
@@ -19,6 +22,7 @@ class PointsHistory(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     comment = db.Column(db.String(255), nullable=False)
 
+    # Relationship to User (this backref works for historical tracking of who added points)
     user = db.relationship('User', backref='points_history')
 
 class User(db.Model, UserMixin):
@@ -26,6 +30,12 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(200))
     role = db.Column(db.String(50), nullable=False)
+
+    # Foreign key linking to Employee table
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=True)
+
+    # Relationship to Employee (make this back_populates to link it properly)
+    employee = db.relationship('Employee', back_populates='user')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

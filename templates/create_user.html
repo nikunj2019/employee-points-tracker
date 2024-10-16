@@ -3,98 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New User</title>
+    <title>Create User</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
             margin: 0;
+            padding: 0;
         }
-        .form-container {
-            width: 100%;
-            max-width: 400px;
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h2 {
+        h1 {
             text-align: center;
-            color: #4CAF50;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
             color: #333;
         }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-            background-color: #f9f9f9;
-            transition: all 0.3s ease;
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
         }
-        input:focus, select:focus {
-            border-color: #4CAF50;
+        label {
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, select {
+            padding: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
         }
         button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
+            padding: 10px;
+            background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 16px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
         button:hover {
-            background-color: #45a049;
-        }
-        .error-message {
-            color: #f44336;
-            font-size: 14px;
-            text-align: center;
-            margin-top: 10px;
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <h2>Create New User</h2>
-        <form action="{{ url_for('create_user') }}" method="POST">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter password" required>
-            </div>
-            <div class="form-group">
-                <label for="role">Role</label>
-                <select id="role" name="role">
-                    <option value="admin">Admin</option>
-                    <option value="manage">Manage</option>
-                    <option value="read_only">Read Only</option>
-                </select>
-            </div>
-            <button type="submit">Create User</button>
-        </form>
-        {% if error %}
-        <div class="error-message">{{ error }}</div>
-        {% endif %}
-    </div>
+
+<div class="container">
+    <h1>Create New User</h1>
+
+<form action="{{ url_for('create_user') }}" method="POST">
+    <label for="username">Username:</label>
+    <input type="text" name="username" required><br>
+
+    <label for="password">Password:</label>
+    <input type="password" name="password" required><br>
+
+    <label for="role">Role:</label>
+    <select name="role" required>
+        <option value="admin">Admin</option>
+        <option value="manage">Manager</option>
+        <option value="read-only">Employee</option>
+    </select><br>
+
+    <label for="employee_id">Assign Employee:</label>
+    <select name="employee_id" required>
+        {% for employee in employees %}
+            <option value="{{ employee.id }}">{{ employee.name }}</option>
+        {% endfor %}
+    </select><br>
+
+    <button type="submit">Create User</button>
+</form>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</div>
+
 </body>
 </html>

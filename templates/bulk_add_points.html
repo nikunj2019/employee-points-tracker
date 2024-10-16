@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Add Points</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #dee2e6;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .comment-box {
+            margin-top: 20px;
+        }
+        .comment-box textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        .bulk-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .back-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-button a {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button a:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            th, td {
+                padding: 10px;
+            }
+            button {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+    <script>
+        function toggleSelect(action) {
+            const checkboxes = document.querySelectorAll('input[name="employees[]"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = (action === 'select');
+            });
+        }
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Bulk Add Points to Employees</h1>
+
+    <div class="bulk-actions">
+        <button type="button" onclick="toggleSelect('select')">Select All</button>
+        <button type="button" onclick="toggleSelect('deselect')">Select None</button>
+    </div>
+
+    <form action="{{ url_for('bulk_add_points') }}" method="POST">
+        <table>
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Employee Name</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="employees[]" value="{{ employee.id }}">
+                    </td>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.points }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <label for="points_category">Points Category:</label>
+        <select name="points_category" required>
+            <option value="10">Perfect Attendance (+10)</option>
+            <option value="20">No Call-Offs in a Month (+20)</option>
+            <option value="5">On Time Every Day in a Week (+5)</option>
+	    <option value="10">Submitting lesson plans on time (+10)</option>
+            <option value="15">Volunteering to cover a shift (+15)</option>
+        </select>
+
+        <div class="comment-box">
+            <label for="comment">Comment:</label>
+            <textarea name="comment" rows="3" placeholder="Enter a comment" required></textarea>
+        </div>
+
+        <button type="submit">Add Points to Selected Employees</button>
+    </form>
+
+    <div class="back-button">
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+</div>
+
+</body>
+</html>

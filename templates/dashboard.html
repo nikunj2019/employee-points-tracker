@@ -107,7 +107,9 @@
         <a href="{{ url_for('read_only_page') }}">Read-Only Page</a>
         {% if current_user.role == 'admin' %}
             <a href="{{ url_for('create_user') }}">Create New User</a>
+	    <a href="{{ url_for('list_users') }}">List Users</a>
             <a href="{{ url_for('change_password') }}">Change User Password</a>
+	    <a href="{{ url_for('bulk_add_points') }}" class="bulk-add-link" method="POST">Bulk Add Points</a>
         {% endif %}
     </nav>
 
@@ -132,7 +134,7 @@
             {% for employee in employees %}
             <tr>
                 <td>
-                    <a href="{{ url_for('view_points_history', id=employee.id) }}">
+                    <a href="{{ url_for('view_points_history', employee_id=employee.id) }}">
                         {{ employee.name }}
                     </a>
                 </td>

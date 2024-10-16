@@ -84,7 +84,7 @@
             <tr>
                 <!-- Hyperlink Employee's Name to View Points History -->
                 <td>
-                    <a href="{{ url_for('view_points_history', id=employee.id) }}">{{ employee.name }}</a>
+                    <a href="{{ url_for('view_points_history', employee_id=employee.id) }}">{{ employee.name }}</a>
                 </td>
                 <td>{{ employee.points }}</td>
 
